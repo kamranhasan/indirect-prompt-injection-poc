@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indirect Prompt Injection PoC - Web Content Injection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔓 Indirect Prompt Injection PoC</h1>
+            <h2>Web Content Injection Demo</h2>
+            <p class="subtitle">Demonstrating how AI systems that scrape websites can be compromised</p>
+        </header>
+
+        <div class="explanation">
+            <h3>📚 What is this?</h3>
+            <p>This demonstrates <strong>indirect prompt injection</strong> where malicious instructions are hidden in web content that an AI system retrieves and processes. Unlike direct prompt injection (attacking the user input), this attack vector exploits the AI's trust in external data sources.</p>
+            
+            <div class="attack-flow">
+                <div class="step">1️⃣ Attacker plants malicious instructions in a webpage</div>
+                <div class="arrow">→</div>
+                <div class="step">2️⃣ AI system scrapes the webpage</div>
+                <div class="arrow">→</div>
+                <div class="step">3️⃣ AI processes content including hidden instructions</div>
+                <div class="arrow">→</div>
+                <div class="step">4️⃣ AI follows malicious instructions</div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>🧪 Try the Demo</h3>
+            
+            <div class="test-urls">
+                <h4>Test URLs:</h4>
+                <div class="url-buttons">
+                    <button onclick="setUrl('{{ url_for('benign_page', _external=True) }}')" class="benign-btn">
+                        ✅ Benign Page (No Injection)
+                    </button>
+                    <button onclick="setUrl('{{ url_for('malicious_page', _external=True) }}')" class="malicious-btn">
+                        ⚠️ Malicious Page (With Hidden Injection)
+                    </button>
+                </div>
+            </div>
+
+            <div class="scraper-controls">
+                <div class="input-group">
+                    <label for="target-url">Target URL:</label>
+                    <input type="text" id="target-url" placeholder="Enter URL to scrape..." />
+                </div>
+
+                <div class="mode-selector">
+                    <label>Scraper Mode:</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="mode" value="vulnerable" checked>
+                            <span class="vulnerable">🔓 Vulnerable (No Defenses)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="mode" value="secure">
+                            <span class="secure">🔒 Secure (With Defenses)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="scrapeUrl()" class="scrape-btn" id="scrape-btn">
+                    🔍 Scrape & Analyze
+                </button>
+            </div>
+        </div>
+
+        <div id="results" class="results" style="display: none;">
+            <h3>📊 Results</h3>
+            
+            <!-- Real-time workflow visualization -->
+            <div id="workflow-steps" class="workflow-container" style="display: none;">
+                <h4>🔄 Real-Time Workflow:</h4>
+                <div class="workflow-steps">
+                    <div class="workflow-step" id="step-1">
+                        <span class="step-icon">⏳</span>
+                        <span class="step-text">1. Fetching webpage...</span>
+                    </div>
+                    <div class="workflow-step" id="step-2">
+                        <span class="step-icon">⏳</span>
+                        <span class="step-text">2. Parsing HTML content...</span>
+                    </div>
+                    <div class="workflow-step" id="step-3">
+                        <span class="step-icon">⏳</span>
+                        <span class="step-text">3. Extracting text (visible + hidden)...</span>
+                    </div>
+                    <div class="workflow-step" id="step-4">
+                        <span class="step-icon">⏳</span>
+                        <span class="step-text">4. Checking for injections...</span>
+                    </div>
+                    <div class="workflow-step" id="step-5">
+                        <span class="step-icon">⏳</span>
+                        <span class="step-text">5. Sending to AI for analysis...</span>
+                    </div>
+                    <div class="workflow-step" id="step-6">
+                        <span class="step-icon">⏳</span>
+                        <span class="step-text">6. Receiving AI response...</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="results-content"></div>
+        </div>
+
+        <div class="comparison-section">
+            <h3>🛡️ Defenses Implemented</h3>
+            <div class="defense-grid">
+                <div class="defense-item">
+                    <h4>1. Content Filtering</h4>
+                    <p>Remove hidden HTML elements (display:none, hidden attributes)</p>
+                </div>
+                <div class="defense-item">
+                    <h4>2. Injection Detection</h4>
+                    <p>Scan for common injection patterns and keywords</p>
+                </div>
+                <div class="defense-item">
+                    <h4>3. Content Sanitization</h4>
+                    <p>Filter out suspicious instruction phrases</p>
+                </div>
+                <div class="defense-item">
+                    <h4>4. Defensive Prompting</h4>
+                    <p>Explicit delimiters and instructions to treat content as data</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="logs-section">
+            <div class="logs-header">
+                <h3>📝 Scraping Logs</h3>
+                <button onclick="clearLogs()" class="clear-btn">Clear Logs</button>
+            </div>
+            <div id="logs" class="logs-container">
+                <p class="no-logs">No scraping attempts yet...</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>⚠️ Educational Purpose Only | Built by Kamran for Cybersecurity Demonstration</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
