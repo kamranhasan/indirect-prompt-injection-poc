@@ -2,6 +2,8 @@
 
 A demonstration system showing how AI systems that scrape websites can be compromised through indirect prompt injection attacks.
 
+<img width="1272" height="1102" alt="image" src="https://github.com/user-attachments/assets/9419710a-cbf2-46d3-86c4-db74697a1718" />
+
 ## What This Demonstrates
 
 This PoC shows how attackers can embed malicious instructions in web content that an AI system retrieves and processes. Unlike direct prompt injection (attacking user input), this exploits the AI's trust in external data sources.
